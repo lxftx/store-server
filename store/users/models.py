@@ -4,10 +4,9 @@ import uuid
 import django.utils.timezone as timezone
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage, send_mail
 from django.db import models
 from django.urls import reverse_lazy
-from django.core.mail import EmailMessage
 
 
 class User(AbstractUser):
@@ -48,12 +47,11 @@ class EmailVerification(models.Model):
         link = reverse_lazy('users:verify', kwargs={'username': self.user.username, 'code': self.code})
         subject = f"Верификация аккаунта на сайте - {settings.DOMAIN_NAME}"
         message = f"Вы были зарегистрированы на нашем сайте. Просим потдвердить этот аккаунт - " \
-        f"{self.user.username} | {self.user.last_name} | {self.user.first_name}.\n" \
-        f"Перейдите по этой ссылке для верификации - {settings.DOMAIN_NAME + link}\n" \
-        f"Время действия ссылки 1 час!"
+                  f"{self.user.username} | {self.user.last_name} | {self.user.first_name}.\n" \
+                  f"Перейдите по этой ссылке для верификации - {settings.DOMAIN_NAME + link}\n" \
+                  f"Время действия ссылки 1 час!"
         msg = EmailMessage(subject, message, to=[self.user.email])
         msg.send()
-
 
     def is_expired(self):
         return timezone.now() > self.expiration

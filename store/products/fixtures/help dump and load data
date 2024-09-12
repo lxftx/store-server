@@ -1,0 +1,2 @@
+dump - python -Xutf8 manage.py dumpdata  products.ProductCategory -o products/fixtures/categories.json
+load - python manage.py loaddata products/fixtures/categories.json

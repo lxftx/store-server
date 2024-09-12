@@ -4,3 +4,6 @@ pillow
 flake8	# Ищет ошибки в проекте по принципу PEP8
 isort	# Сортирует все import и файлы в алфавитном порядке
 django-allauth	# Подключение через сторонние сервисы, подобные : Django-Social-Auth, Python-Social-Auth
+psycopg2
+requests	# Для django-allauth
+django-debug-toolbar
