@@ -1,10 +1,8 @@
-import datetime
-import uuid
-
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from users.tasks import send_email_verification
 
-from users.models import EmailVerification, User
+from users.models import User
 
 
 class UserLoginForm(AuthenticationForm):
@@ -64,10 +62,8 @@ class UserRegistrationForm(UserCreationForm):
     def save(self, commit=True):
         # Метод save, возвращает объект User
         user = super(UserRegistrationForm, self).save(commit=True)
-        expiration = datetime.datetime.now() + datetime.timedelta(hours=-4)
-        record = EmailVerification.objects.create(code=uuid.uuid4(), user=user, expiration=expiration)
-        # Вызов метода с модели, отправки кода верификации
-        record.send_verification_code()
+        print(user)
+        send_email_verification.delay(user.id)
         return user
 
     class Meta:

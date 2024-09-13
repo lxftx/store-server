@@ -37,38 +37,38 @@ services:
     image: redis:7-alpine3.20
     hostname: redis
 
-  # worker:
-  #   build:
-  #     context: .
-  #   hostname: worker
-  #   entrypoint: celery
-  #   command: -A celery_app.app worker --loglevel=INFO
-  #   volumes:
-  #     - './store:/store'
-  #   links:
-  #     - redis
-  #   depends_on:
-  #     - redis
-  #     - database
-  #   environment:
-  #     # Мы не указываем ip-адрес базы данных, а передаем ссылку на другой сервис docker-compose
-  #     - DB_HOST=database
-  #     - DB_NAME=analityc
-  #     - DB_USER=postgres
-  #     - DB_PASS=Qwerty12345
-  #     - DB_PORT=5432
+  worker:
+    build:
+      context: .
+    hostname: worker
+    entrypoint: celery
+    command: -A store worker --loglevel=INFO
+    volumes:
+      - './store:/store'
+    links:
+      - redis
+    depends_on:
+      - redis
+      - database
+    environment:
+      # Мы не указываем ip-адрес базы данных, а передаем ссылку на другой сервис docker-compose
+      - DB_HOST=database
+      - DB_NAME=analityc
+      - DB_USER=postgres
+      - DB_PASS=Qwerty12345
+      - DB_PORT=5432
 
-  # flower:
-  #   build:
-  #     context: .
-  #   hostname: flower
-  #   entrypoint: celery
-  #   command: -A celery_app.app flower
-  #   volumes:
-  #     - './store:/store'
-  #   links:
-  #     - redis
-  #   depends_on:
-  #     - redis
-  #   ports:
-  #     - '5555:5555'
+  flower:
+    build:
+      context: .
+    hostname: flower
+    entrypoint: celery
+    command: -A store flower
+    volumes:
+      - './store:/store'
+    links:
+      - redis
+    depends_on:
+      - redis
+    ports:
+      - '5555:5555'
