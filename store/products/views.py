@@ -5,7 +5,7 @@ from django.core.paginator import \
 from django.shortcuts import HttpResponseRedirect, render
 from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
-
+from django.core.cache import cache
 from common.views import TitleMixin
 from products.models import Basket, Product, ProductCategory
 
@@ -42,7 +42,16 @@ class ProductListView(TitleMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ProductListView, self).get_context_data(**kwargs)
-        context['categories'] = ProductCategory.objects.all()
+        # Установка кэша
+        categories = cache.get('categories')
+        # Если мы кэш не находим
+        if not categories:
+            # То мы его устанавливаем на 30 секунд
+            context['categories'] = ProductCategory.objects.all()
+            cache.set('categories', context['categories'], 30)
+        else:
+            # Если он все же есть, то отдаем
+            context['categories'] = categories
         return context
 
 

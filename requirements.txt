@@ -1,5 +1,4 @@
 django
-psycopg2
 pillow
 flake8	# Ищет ошибки в проекте по принципу PEP8
 isort	# Сортирует все import и файлы в алфавитном порядке
@@ -7,3 +6,7 @@ django-allauth	# Подключение через сторонние серви
 psycopg2
 requests	# Для django-allauth
 django-debug-toolbar
+psycopg2
+celery[redis]==5.4.0
+flower
+django-celery-beat

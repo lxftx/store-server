@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-b6!_=ql=+_3u13s%3+g%6k87m0tmf&_17q1mei0hkr@v-x-j$+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 # Глобальная переменная, созданная собственноручно, для слияния с ссылкой отправки письма подтверждения
 DOMAIN_NAME = 'http://127.0.0.1:8000'
@@ -37,15 +37,15 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    "django.contrib.staticfiles",
+
+    "debug_toolbar",
 
     'django.contrib.sites',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.github',
-
-    'debug_toolbar',
 
     'products',
     'users'
@@ -60,7 +60,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "allauth.account.middleware.AccountMiddleware",
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = 'store.urls'
@@ -71,6 +71,10 @@ INTERNAL_IPS = [
     '127.0.0.1',
     'localhost'
 ]
+
+import socket
+hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+INTERNAL_IPS += [".".join(ip.split(".")[:-1] + ["1"]) for ip in ips]
 
 
 TEMPLATES = [
@@ -102,11 +106,11 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'analityc',
-        'USER': 'postgres',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'HOST': os.environ.get('DB_HOST'),
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASS'),
+        'PORT': os.environ.get('DB_PORT')
     }
 }
 
@@ -114,7 +118,11 @@ DATABASES = {
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379",
+        "LOCATION": "redis://redis:6379",
+        "OPTIONS": {
+            "db": "10",
+            "pool_class": "redis.BlockingConnectionPool",
+        },
     }
 }
 
@@ -167,15 +175,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.User'  # Глобально переопределяем модель с которой мы работаем
 LOGIN_URL = 'users:index'  # Глобальная переменная(ссылка), для декоратора login_required, для переадресации
-LOGIN_REDIRECT_URL = '/'  # Глобальная переменная, для переадресации при авторизации
-LOGOUT_REDIRECT_URL = '/'  # Глобальная переменная, для переадресации при logout
+LOGIN_REDIRECT_URL = 'index'  # Глобальная переменная, для переадресации при авторизации
+LOGOUT_REDIRECT_URL = 'index'  # Глобальная переменная, для переадресации при logout
 
 # Sending email
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "lxftx04@gmail.com"
-EMAIL_HOST_PASSWORD = "hfmr dgqg cayg ojvc"
+EMAIL_HOST_USER = ""
+EMAIL_HOST_PASSWORD = ""
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
