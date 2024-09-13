@@ -1,0 +1,32 @@
+from django.db import models
+from users.models import User
+
+class Orders(models.Model):
+    CREATED = 0
+    PAID = 1
+    ON_WAY = 2
+    DELIVERIED = 3
+    STATUSES = (
+        (CREATED, 'Создан'),
+        (PAID, 'Оплачен'),
+        (ON_WAY, 'В пути'),
+        (DELIVERIED, 'Доставлен'),
+    )
+
+
+    first_name = models.CharField(max_length=64, verbose_name='Имя')
+    last_name = models.CharField(max_length=64, verbose_name='Фамилия')
+    email = models.EmailField(max_length=256, verbose_name='Адрес электронной почты')
+    address = models.CharField(max_length=256, verbose_name='Адрес')
+    created = models.DateTimeField(verbose_name='Дата создания', auto_now_add=True)
+    basket_history = models.JSONField(default=dict, verbose_name='Товары')
+    status = models.SmallIntegerField(choices=STATUSES, default=CREATED, verbose_name='Статус')
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE, verbose_name='Заказывал')
+
+    def __str__(self):
+        return f"Заказ №{self.id} | Для пользователя - {self.last_name} {self.first_name}."
+    
+    class Meta:
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'
+        
