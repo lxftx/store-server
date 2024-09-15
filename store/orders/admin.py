@@ -1,6 +1,7 @@
 from django.contrib import admin
 from orders.models import Orders
 
+
 @admin.register(Orders)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'status')

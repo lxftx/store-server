@@ -1,5 +1,7 @@
 from django.db import models
 from users.models import User
+from products.models import Basket
+
 
 class Orders(models.Model):
     CREATED = 0
@@ -13,7 +15,6 @@ class Orders(models.Model):
         (DELIVERIED, 'Доставлен'),
     )
 
-
     first_name = models.CharField(max_length=64, verbose_name='Имя')
     last_name = models.CharField(max_length=64, verbose_name='Фамилия')
     email = models.EmailField(max_length=256, verbose_name='Адрес электронной почты')
@@ -25,8 +26,18 @@ class Orders(models.Model):
 
     def __str__(self):
         return f"Заказ №{self.id} | Для пользователя - {self.last_name} {self.first_name}."
-    
+
+    def update_for_history(self):
+        basket = Basket.objects.filter(user=self.user)
+        self.status = self.PAID
+        self.basket_history = {
+            'items': [item.de_json() for item in basket],
+            'total_sum': float(basket.total_price())
+        }
+        basket.delete()
+        self.save()
+
     class Meta:
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
-        
+        ordering = ['-id']

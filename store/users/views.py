@@ -23,6 +23,7 @@ class SignUpView(TitleMixin, LoginView):
     def get_success_url(self):
         return reverse_lazy('index')
 
+
 # def login(request):
 #     if request.method == 'POST':
 #         form = UserLoginForm(data=request.POST)  # data - обязательно
@@ -69,7 +70,6 @@ def logout_view(request):
     return HttpResponseRedirect(reverse_lazy('index'))
 
 
-
 class UserUpdateView(TitleMixin, UpdateView):
     model = User
     form_class = UserProfileForm
@@ -86,6 +86,7 @@ class UserUpdateView(TitleMixin, UpdateView):
     #     context = super(UserUpdateView, self).get_context_data(**kwargs)
     #     context['baskets'] = Basket.objects.filter(user=self.object)
     #     return context
+
 
 # Декоратор, который перенаправляет пользователя на указанную ссылку, если он не авторизован
 # @login_required(login_url=settings.LOGIN_URL)

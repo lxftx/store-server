@@ -1,29 +1,30 @@
 from django import forms
 from orders.models import Orders
 
+
 class OrderForm(forms.ModelForm):
     first_name = forms.CharField(widget=forms.TextInput(
         attrs={
-            "class":"form-control",
-            "placeholder":"Иван"
+            "class": "form-control",
+            "placeholder": "Иван"
         }
     ))
     last_name = forms.CharField(widget=forms.TextInput(
         attrs={
-            "class":"form-control",
-            "placeholder":"Иванов"
+            "class": "form-control",
+            "placeholder": "Иванов"
         }
     ))
     email = forms.EmailField(widget=forms.EmailInput(
         attrs={
-            "class":"form-control",
-            "placeholder":"you@example.com"
+            "class": "form-control",
+            "placeholder": "you@example.com"
         }
     ))
     address = forms.CharField(widget=forms.TextInput(
         attrs={
-            "class":"form-control",
-            "placeholder":"Россия, Москва, ул. Мира, дом 6"
+            "class": "form-control",
+            "placeholder": "Россия, Москва, ул. Мира, дом 6"
         }
     ))
 

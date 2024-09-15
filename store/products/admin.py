@@ -13,9 +13,9 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'price', 'quantity', 'category')
     # fields = - метод, который выводит переданные поля в записи ввиде листа(кортеж) в админ панеле
     # измененние расположения полей просходит при помощи оборачивания кортежем двух полей и тд.тп.
-    fields = ['name', 'description', 'price', ('quantity', 'image'), 'category']
+    fields = ['name', 'description', 'price', ('quantity', 'image'), 'stripe_produc_price_id', 'category']
     # readonly_fields - метод, который помечает поле только для чтения
-    readonly_fields = ['price', 'quantity']
+    readonly_fields = ['price', 'quantity', 'stripe_produc_price_id']
     # search_fields - метод, по который добавляет в админ панеле поле для поиска по переданному поле
     search_fields = ['name']
     # ordering - метод, который сортирует записи в админ панеле по переданному полю

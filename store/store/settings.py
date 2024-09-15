@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os.path
+import socket
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -24,7 +25,7 @@ SECRET_KEY = 'django-insecure-b6!_=ql=+_3u13s%3+g%6k87m0tmf&_17q1mei0hkr@v-x-j$+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'web-app']
 
 # Глобальная переменная, созданная собственноручно, для слияния с ссылкой отправки письма подтверждения
 DOMAIN_NAME = 'http://127.0.0.1:8000'
@@ -74,10 +75,9 @@ INTERNAL_IPS = [
     'localhost'
 ]
 
-import socket
+
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
 INTERNAL_IPS += [".".join(ip.split(".")[:-1] + ["1"]) for ip in ips]
-
 
 TEMPLATES = [
     {
@@ -211,8 +211,13 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-
 # CELERY
 
 CELERY_BROKER_URL = 'redis://redis:6379/0'
 # CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+
+
+# STRIPE 
+STRIPE_PUBLICK_KEY = ''
+STRIPE_SECRET_KEY = ''
+STRIPE_WEBHOOK_SECRET_KEY = ''

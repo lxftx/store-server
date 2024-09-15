@@ -1,4 +1,11 @@
 services:
+  stripe-cli:
+    image: stripe/stripe-cli
+    # command: "listen --api-key ${STRIPE_API_KEY} --device-name ${STRIPE_DEVICE_NAME} --forward-to web:8000/payment/webhook/"
+    # env_file:
+    #   - stripe_cli.env
+    command: "listen --api-key sk_test_51PytUFP9YC45DH67ddPzMrxFDsqhEWa3ZHwgFjeySwcwGME0aUhvky7CQHu4dzDSMCTXwosDWk2GxbOGzWKQ8r2000ArulBYTJ --forward-to web-app:8000/payment/webhook/"
+
   web-app:
     build:
       context: .

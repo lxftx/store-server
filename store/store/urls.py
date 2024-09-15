@@ -19,6 +19,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from debug_toolbar.toolbar import debug_toolbar_urls
+from orders.views import stripe_webhook_view
 
 from products.views import IndexView
 
@@ -29,6 +30,7 @@ urlpatterns = [
     path('users/', include('users.urls', namespace='users')),
     path('accounts/', include('allauth.urls')),
     path('order/', include('orders.urls', namespace='orders')),
+    path('payment/webhook/', stripe_webhook_view, name='stripe_weebhook'),
 ]
 
 if settings.DEBUG:
