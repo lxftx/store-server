@@ -74,7 +74,8 @@ INSTALLED_APPS = [
     'django.contrib.humanize',  # Конвертирует числа в денежную форму
 
     "debug_toolbar",
-
+    "django_extensions",
+    
     'django.contrib.sites',
     'allauth',
     'allauth.account',

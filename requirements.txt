@@ -12,4 +12,5 @@ flower
 django-celery-beat
 stripe
 django-environ
-environs
+environs	# Методы для настройки виртуальной окружения
+django-extensions	# Улучшенный shell. Вызов shell_plus
