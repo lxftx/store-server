@@ -1,19 +1,20 @@
-from django.db.models.query import QuerySet
-import stripe
 from http import HTTPStatus
 
+import stripe
+from django.conf import settings
+from django.db.models.query import QuerySet
+from django.http import HttpResponse
 from django.shortcuts import HttpResponseRedirect
+from django.urls import reverse_lazy
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView
+from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView
-from orders.forms import OrderForm
-from django.urls import reverse_lazy
-from orders.models import Orders
+
 from common.views import TitleMixin
-from django.conf import settings
-from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse
+from orders.forms import OrderForm
+from orders.models import Orders
 from products.models import Basket
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -101,19 +102,17 @@ def stripe_webhook_view(request):
     except stripe.error.SignatureVerificationError:
         # Invalid signature
         return HttpResponse(status=400)
-    order_id = event['data']['object']['metadata']['order_id']
-
     if (
             event['type'] == 'checkout.session.completed'
             or event['type'] == 'checkout.session.async_payment_succeeded'
     ):
-        fulfill_checkout(order_id)
+        fulfill_checkout(event['data']['object'])
 
     return HttpResponse(status=200)
 
 
 def fulfill_checkout(session_id):
-    order_id = int(session_id)
+    order_id = int(session_id.metadata.order_id)
     order = Orders.objects.get(id=order_id)
     order.update_for_history()
     print("Fulfilling Checkout Session", order_id)

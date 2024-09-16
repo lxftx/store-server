@@ -1,8 +1,8 @@
 from django.conf import settings
 from django.contrib import auth, messages
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.auth import logout
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import HttpResponseRedirect, render
 from django.urls import reverse_lazy

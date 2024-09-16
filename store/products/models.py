@@ -1,8 +1,8 @@
 from typing import Iterable
-import stripe
 
-from django.db import models
+import stripe
 from django.conf import settings
+from django.db import models
 
 from users.models import User
 

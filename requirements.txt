@@ -11,3 +11,5 @@ celery[redis]==5.4.0
 flower
 django-celery-beat
 stripe
+django-environ
+environs

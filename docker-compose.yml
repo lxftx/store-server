@@ -14,17 +14,17 @@ services:
     # Эта директива говорит о том, что мы вмонтируем данное приложение в наш проект Django
     volumes:
       - './store:/store'
-    environment:
-      # Мы не указываем ip-адрес базы данных, а передаем ссылку на другой сервис docker-compose
-      - DB_HOST=database
-      - DB_NAME=analityc
-      - DB_USER=postgres
-      - DB_PASS=Qwerty12345
-      - DB_PORT=5432
+    # environment:
+    #   # Мы не указываем ip-адрес базы данных, а передаем ссылку на другой сервис docker-compose
+    #   - DB_HOST=database
+    #   - DB_NAME=analityc
+    #   - DB_USER=postgres
+    #   - DB_PASS=Qwerty12345
+    #   - DB_PORT=5432
 #    networks:
 #      - djangonetwork
     command: >
-      sh -c "python manage.py runserver --insecure 0.0.0.0:8000"
+      sh -c "python manage.py runserver 0.0.0.0:8000"
     # Эта директива говорит, что наш сервис зависит от сервиса database и будет запущен после того, когда запустится database
     depends_on:
       - database

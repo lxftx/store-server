@@ -9,26 +9,58 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+import environ
 import os.path
 import socket
 from pathlib import Path
 
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False),
+    SECRET_KEY=(str),
+    DOMAIN_NAME=(str),
+
+    HOST=(str),
+    NAME=(str),
+    USER=(str),
+    PASSWORD=(str),
+    PORT=(str),
+
+    REDIS_HOST=(str),
+    REDIS_PORT=(str),
+
+    EMAIL_HOST=(str),
+    EMAIL_PORT=(str),
+    EMAIL_HOST_USER=(str),
+    EMAIL_HOST_PASSWORD=(str),
+    EMAIL_USE_TLS=(str),
+    EMAIL_USE_SSL=(str),
+
+    STRIPE_PUBLICK_KEY=(str),
+    STRIPE_SECRET_KEY=(str),
+    STRIPE_WEBHOOK_SECRET_KEY=(str)
+)
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Подгружаем данные с файла .env
+environ.Env.read_env(BASE_DIR / '.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-b6!_=ql=+_3u13s%3+g%6k87m0tmf&_17q1mei0hkr@v-x-j$+'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'web-app']
 
 # Глобальная переменная, созданная собственноручно, для слияния с ссылкой отправки письма подтверждения
-DOMAIN_NAME = 'http://127.0.0.1:8000'
+DOMAIN_NAME = env('DOMAIN_NAME')
 
 # Application definition
 
@@ -108,19 +140,24 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': os.environ.get('DB_HOST'),
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASS'),
-        'PORT': os.environ.get('DB_PORT')
+        'HOST': env('HOST'),
+        'NAME': env('NAME'),
+        'USER': env('USER'),
+        'PASSWORD': env('PASSWORD'),
+        'PORT': env('PORT')
     }
 }
 
 # REDIS
+
+REDIS_HOST = env('REDIS_HOST')
+REDIS_PORT = env('REDIS_PORT')
+
+# CACHE
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": "redis://redis:6379",
+        "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}",
         "OPTIONS": {
             "db": "10",
             "pool_class": "redis.BlockingConnectionPool",
@@ -181,13 +218,15 @@ LOGIN_REDIRECT_URL = 'index'  # Глобальная переменная, дл�
 LOGOUT_REDIRECT_URL = 'index'  # Глобальная переменная, для переадресации при logout
 
 # Sending email
-
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = ""
-EMAIL_HOST_PASSWORD = ""
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+else:
+    EMAIL_HOST = env('EMAIL_HOST')
+    EMAIL_PORT = env('EMAIL_PORT')
+    EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+    EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+    EMAIL_USE_TLS = env('EMAIL_USE_TLS')
+    EMAIL_USE_SSL = env('EMAIL_USE_SSL')
 
 # Settings django-allauth
 
@@ -213,11 +252,11 @@ SOCIALACCOUNT_PROVIDERS = {
 
 # CELERY
 
-CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
 # CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
 
 
 # STRIPE 
-STRIPE_PUBLICK_KEY = ''
-STRIPE_SECRET_KEY = ''
-STRIPE_WEBHOOK_SECRET_KEY = ''
+STRIPE_PUBLIC_KEY = env('STRIPE_PUBLIC_KEY')
+STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
+STRIPE_WEBHOOK_SECRET_KEY = env('STRIPE_WEBHOOK_SECRET_KEY')
