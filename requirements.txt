@@ -14,3 +14,4 @@ stripe
 django-environ
 environs	# Методы для настройки виртуальной окружения
 django-extensions	# Улучшенный shell. Вызов shell_plus
+gunicorn	# Работа Django c Nginx

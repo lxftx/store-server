@@ -1,10 +1,7 @@
 services:
   stripe-cli:
     image: stripe/stripe-cli
-    # command: "listen --api-key ${STRIPE_API_KEY} --device-name ${STRIPE_DEVICE_NAME} --forward-to web:8000/payment/webhook/"
-    # env_file:
-    #   - stripe_cli.env
-    command: "listen --api-key sk_test_51PytUFP9YC45DH67ddPzMrxFDsqhEWa3ZHwgFjeySwcwGME0aUhvky7CQHu4dzDSMCTXwosDWk2GxbOGzWKQ8r2000ArulBYTJ --forward-to web-app:8000/payment/webhook/"
+    command: "listen --api-key ${STRIPE_SECRET_KEY} --forward-to web-app:8000/payment/webhook/"
 
   web-app:
     build:
@@ -36,9 +33,9 @@ services:
 #    networks:
 #      - djangonetwork
     environment:
-      - POSTGRES_DB=analityc
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=Qwerty12345
+      - POSTGRES_DB=${NAME}
+      - POSTGRES_USER=${USER}
+      - POSTGRES_PASSWORD=${PASSWORD}
 
   redis:
     image: redis:7-alpine3.20
@@ -59,11 +56,11 @@ services:
       - database
     environment:
       # Мы не указываем ip-адрес базы данных, а передаем ссылку на другой сервис docker-compose
-      - DB_HOST=database
-      - DB_NAME=analityc
-      - DB_USER=postgres
-      - DB_PASS=Qwerty12345
-      - DB_PORT=5432
+      - DB_HOST=${HOST}
+      - DB_NAME=${NAME}
+      - DB_USER=${USER}
+      - DB_PASS=${PASSWORD}
+      - DB_PORT=${PORT}
 
   flower:
     build:
