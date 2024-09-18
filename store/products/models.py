@@ -32,7 +32,7 @@ class Product(models.Model):
     stripe_produc_price_id = models.CharField(max_length=256, null=True, blank=True, verbose_name='ID STRIPE')
 
     def __str__(self):
-        return f'Вещь: {self.name} | Цена: {self.price}₽ | Категория: {self.category}'
+        return f"Вещь: {self.name} | Цена: {self.price}₽ | Категория: {self.category}"
 
     # До того, как должен отработать метод save, т.е пока не срабатывает super(). Мы добавляем в строку 
     # stripe_produc_price_id - значение, а после этого происходит сохранение объекта в super()
@@ -85,9 +85,7 @@ class Basket(models.Model):
     objects = BasketQuerySet.as_manager()
 
     def __str__(self):
-        return (f'Продукт: {self.product.name} | '
-                f'Пользователь: {self.user.first_name + ' ' + self.user.last_name} | '
-                f'в количестве: {self.quantity}')
+        return (f"Продукт: {self.product.name} | Пользователь: {self.user.first_name + ' ' + self.user.last_name} | в количестве: {self.quantity}")
 
     def sum(self):
         return self.quantity * self.product.price

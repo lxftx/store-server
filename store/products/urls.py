@@ -8,7 +8,7 @@ app_name = 'products'   # переменная которая говорит к�
 urlpatterns = [
     path('', ProductListView.as_view(), name='index'),   # name - для динамической url ссылки
     # cache_page - кэшируем страницу (грубый режим) на 30 секунд
-    path('category/<str:category_id>/', cache_page(30)(ProductListView.as_view()), name='category'),
+    path('category/<str:category_id>/', ProductListView.as_view(), name='category'),
     path('page/<int:page>/', ProductListView.as_view(), name='paginator'),
     path('baskets/add/<int:product_id>/', basket_add, name='basket_add'),
     path('baskets/delete/<int:product_id>/', basket_remove, name='basket_remove'),

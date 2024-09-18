@@ -21,11 +21,11 @@ env = environ.Env(
     SECRET_KEY=(str),
     DOMAIN_NAME=(str),
 
-    HOST=(str),
-    NAME=(str),
-    USER=(str),
-    PASSWORD=(str),
-    PORT=(str),
+    DATABASE_NAME=(str),
+    DATABASE_USER=(str),
+    DATABASE_PASSWORD=(str),
+    DATABASE_HOST=(str),
+    DATABASE_PORT=(str),
 
     REDIS_HOST=(str),
     REDIS_PORT=(str),
@@ -34,8 +34,8 @@ env = environ.Env(
     EMAIL_PORT=(str),
     EMAIL_HOST_USER=(str),
     EMAIL_HOST_PASSWORD=(str),
-    EMAIL_USE_TLS=(str),
-    EMAIL_USE_SSL=(str),
+    EMAIL_USE_TLS=(bool),
+    EMAIL_USE_SSL=(bool),
 
     STRIPE_PUBLICK_KEY=(str),
     STRIPE_SECRET_KEY=(str),
@@ -135,17 +135,13 @@ WSGI_APPLICATION = 'store.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': env('HOST'),
-        'NAME': env('NAME'),
-        'USER': env('USER'),
-        'PASSWORD': env('PASSWORD'),
-        'PORT': env('PORT')
+        'HOST': env('DATABASE_HOST'),
+        'NAME': env('DATABASE_NAME'),
+        'USER': env('DATABASE_USER'),
+        'PASSWORD': env('DATABASE_PASSWORD'),
+        'PORT': env('DATABASE_PORT')
     }
 }
 
@@ -160,7 +156,7 @@ CACHES = {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
         "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}",
         "OPTIONS": {
-            "db": "10",
+            "db": "1",
             "pool_class": "redis.BlockingConnectionPool",
         },
     }
@@ -254,7 +250,7 @@ SOCIALACCOUNT_PROVIDERS = {
 # CELERY
 
 CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
-# CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
 
 
 # STRIPE 

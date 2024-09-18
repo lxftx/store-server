@@ -56,7 +56,7 @@
             
                 <div class="row">
                     <!-- Кэшировование какой-то части в шаблоне -->
-                    {% cache 30 products %}
+{#                    {% cache 30 products %}#}
                         {% for product in products %}
                             <div class="col-lg-4 col-md-6 mb-4">
                             <div class="card h-100">
@@ -78,7 +78,7 @@
                             </div>
                         </div>
                         {% endfor %}
-                    {% endcache %}
+{#                    {% endcache %}#}
                 </div>
                 {% if is_paginated %}
                     <nav aria-label="Page navigation example">

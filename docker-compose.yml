@@ -33,9 +33,9 @@ services:
 #    networks:
 #      - djangonetwork
     environment:
-      - POSTGRES_DB=${NAME}
-      - POSTGRES_USER=${USER}
-      - POSTGRES_PASSWORD=${PASSWORD}
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
 
   redis:
     image: redis:7-alpine3.20
@@ -56,11 +56,11 @@ services:
       - database
     environment:
       # Мы не указываем ip-адрес базы данных, а передаем ссылку на другой сервис docker-compose
-      - DB_HOST=${HOST}
-      - DB_NAME=${NAME}
-      - DB_USER=${USER}
-      - DB_PASS=${PASSWORD}
-      - DB_PORT=${PORT}
+      - DB_HOST=${DATABASE_HOST}
+      - DB_NAME=${DATABASE_NAME}
+      - DB_USER=${DATABASE_USER}
+      - DB_PASS=${DATABASE_PASSWORD}
+      - DB_PORT=${DATABASE_PORT}
 
   flower:
     build:
